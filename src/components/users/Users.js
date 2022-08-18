@@ -1,14 +1,30 @@
-import React from 'react';
+import React from 'react';  
+import { useEffect, useState } from 'react';
+import { getUserPost, getUsers } from '../../services/users.axios.api.services';
+import { User } from '../user/User';
 
-function Users(props) {
-    
+function Users  () {  
+   let [users,setUsers] = useState([]);
+   let [posts,setPosts] = useState([]);
 
+    useEffect(() => {
+    getUsers().then(response => setUsers([...response.data]))
+    },[]);
 
-    return (
-        <div>
+    let userFx = (user)=>getUserPost(user.id).then(response => setPosts([...response.data]))
+    console.log(posts);
 
-        </div>
-    );
+  
+ return(
+ <div>
+{
+ users.map(user => <User key={user.id} user={user}  fxUser={userFx}/>)
 }
+{
+    posts && posts.map(post => <p>{post.body}</p>)
+}
+ </div>
+ )
+ }
 
 export {Users}
